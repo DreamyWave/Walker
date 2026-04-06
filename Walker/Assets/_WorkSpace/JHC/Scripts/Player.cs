@@ -5,24 +5,33 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    [Header("플레이어 움직임 설정")]
     private Vector2 moveInput = Vector2.zero;
-    private Vector2 cameraMoveInput;
-    private float maxRotationY = 88.0f;
-
     public float moveSpeed = 6.0f;
-    public float mouseSensitivity = 0.2f;
     public float jumpPower = 5.0f;
     private bool isJump = false;
-    public GameObject playerCameraX;
-    public GameObject playerCameraY;
     private Rigidbody rb;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [Header("마우스 설정")]
+    private Vector2 cameraMoveInput;
+    public float mouseSensitivity = 0.2f;
+    private float maxRotationY = 88.0f;
+    public GameObject playerCameraX;
+    public GameObject playerCameraY;
+
+    [Header("플레이어 체력 설정")]
+    public int maxHp = 100;
+    private int currentHp;
+
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+    }
+    void Start()
+    {
         transform.rotation = Quaternion.identity;       // 시작할 때 항상 정면을 보도록 초기화
         isJump = false;
+        currentHp = maxHp;
     }
 
     private void OnMove(InputValue value)
@@ -45,11 +54,25 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void TakeDamage(int damage)
+    {
+        currentHp -= damage;
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("게임 오버");
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
         {
             isJump = false;
+        }
+
+        if(collision.gameObject.CompareTag("Monster"))
+        {
+            TakeDamage(100);
         }
     }
 
@@ -64,5 +87,11 @@ public class Player : MonoBehaviour
 
         // rb.AddRelativeForce(moveInput.x * moveSpeed * Time.deltaTime, 0, moveInput.y * moveSpeed * Time.deltaTime);
         // 이동 후 바로 멈추지 않고 미끄러짐
+
+        if(currentHp <= 0)
+        {
+            currentHp = 0;
+            GameOver();
+        }
     }
 }

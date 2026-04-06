@@ -267,10 +267,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   moveSpeed: 6
-  mouseSensitivity: 0.2
   jumpPower: 5
+  mouseSensitivity: 0.2
   playerCameraX: {fileID: 359839999}
   playerCameraY: {fileID: 768866914}
+  maxHp: 100
 --- !u!114 &359840001
 MonoBehaviour:
   m_ObjectHideFlags: 0

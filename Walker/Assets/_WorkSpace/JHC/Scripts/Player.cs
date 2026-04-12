@@ -19,19 +19,29 @@ public class Player : MonoBehaviour
     public GameObject playerCameraX;
     public GameObject playerCameraY;
 
-    [Header("플레이어 체력 설정")]
-    public int maxHp = 100;
-    private int currentHp;
+    //[Header("플레이어 체력 설정")]
+    //public int maxHp = 100;
+    //private int currentHp;
+
+    [Header("배고픔 데미지 설정")] //
+    public int hungerDamage = 1; // 배고픔 데미지
+    public float hungerInterval = 20f; //20초마다 배고픔 닳음
+
+    private PlayerStatus playerStatus;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        playerStatus = GetComponent<PlayerStatus>();
     }
     void Start()
     {
         transform.rotation = Quaternion.identity;       // 시작할 때 항상 정면을 보도록 초기화
         isJump = false;
-        currentHp = maxHp;
+        //currentHp = maxHp;
+
+        
     }
 
     private void OnMove(InputValue value)
@@ -54,15 +64,28 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
-    {
-        currentHp -= damage;
-    }
+    //public void TakeDamage(int damage)
+    //{
+       // currentHp -= damage;
 
-    public void GameOver()
+        // 체력 최소값 제한
+        //if (currentHp <= 0)
+       // {
+        //    currentHp = 0;
+        //    GameOver();
+        //}
+   // }
+    // 배고픔 데미지
+    void HungerDamage()
     {
-        Debug.Log("게임 오버");
+        playerStatus.TakeDamage(hungerDamage);
     }
+   // public void GameOver()
+    //{
+     //   Debug.Log("게임 오버");
+        
+     //   Time.timeScale = 0f; // 게임 정지
+   // }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
@@ -72,7 +95,7 @@ public class Player : MonoBehaviour
 
         if(collision.gameObject.CompareTag("Monster"))
         {
-            TakeDamage(100);
+            playerStatus.TakeDamage(10);
         }
     }
 
@@ -88,10 +111,10 @@ public class Player : MonoBehaviour
         // rb.AddRelativeForce(moveInput.x * moveSpeed * Time.deltaTime, 0, moveInput.y * moveSpeed * Time.deltaTime);
         // 이동 후 바로 멈추지 않고 미끄러짐
 
-        if(currentHp <= 0)
-        {
-            currentHp = 0;
-            GameOver();
-        }
+        //if(currentHp <= 0)
+        //{
+        //    currentHp = 0;
+        //    GameOver();
+        //}
     }
 }

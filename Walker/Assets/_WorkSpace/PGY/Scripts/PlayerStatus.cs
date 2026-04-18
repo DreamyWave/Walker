@@ -15,6 +15,9 @@ public class PlayerStatus : MonoBehaviour
     public float shakeAmount = 0.02f; // 흔들림 강도
     public float shakeSpeed = 5f; // 흔들림 속도
 
+    [Header("음식 회복")]
+    public int foodHealAmount = 10; //회복량
+
     private Vector3 originalPos; // 원래 위치 저장
 
     private void Start()
@@ -39,6 +42,20 @@ public class PlayerStatus : MonoBehaviour
             currentHp = 0;
             GameOver();
         }
+    }
+    public void Heal(int amount)
+    {
+        currentHp += amount;
+
+        if(currentHp > maxHp)
+        {
+            currentHp = maxHp;
+        }
+        Debug.Log("체력 회복: " + currentHp);
+    }
+    public void EatFood()
+    {
+        Heal(foodHealAmount);
     }
 
     // 배고픔 데미지

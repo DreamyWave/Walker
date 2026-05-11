@@ -1,5 +1,3 @@
-using NUnit.Framework.Constraints;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -23,25 +21,27 @@ public class Player : MonoBehaviour
     //public int maxHp = 100;
     //private int currentHp;
 
-    [Header("배고픔 데미지 설정")] //
-    public int hungerDamage = 1; // 배고픔 데미지
-    public float hungerInterval = 20f; //20초마다 배고픔 닳음
+    [Header("몬스터 데미지")]
+    public int monsterDmg = 10;
 
+    [Header("플레이어 스테이터스")] 
     private PlayerStatus playerStatus;
+
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
 
         playerStatus = GetComponent<PlayerStatus>();
+
+        // 마우스 커서 숨기기
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     void Start()
     {
         transform.rotation = Quaternion.identity;       // 시작할 때 항상 정면을 보도록 초기화
         isJump = false;
-        //currentHp = maxHp;
-
-        
     }
 
     private void OnMove(InputValue value)
@@ -64,28 +64,16 @@ public class Player : MonoBehaviour
         }
     }
 
-    //public void TakeDamage(int damage)
-    //{
-       // currentHp -= damage;
-
-        // 체력 최소값 제한
-        //if (currentHp <= 0)
-       // {
-        //    currentHp = 0;
-        //    GameOver();
-        //}
-   // }
     // 배고픔 데미지
     void HungerDamage()
     {
-        playerStatus.TakeDamage(hungerDamage);
+        playerStatus.TakeDamage(playerStatus.hungerDamage);
     }
-   // public void GameOver()
-    //{
-     //   Debug.Log("게임 오버");
-        
-     //   Time.timeScale = 0f; // 게임 정지
-   // }
+
+    void MonsterDamage()
+    {
+        playerStatus.TakeDamage(monsterDmg);
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
@@ -95,7 +83,7 @@ public class Player : MonoBehaviour
 
         if(collision.gameObject.CompareTag("Monster"))
         {
-            playerStatus.TakeDamage(10);
+            
         }
     }
 

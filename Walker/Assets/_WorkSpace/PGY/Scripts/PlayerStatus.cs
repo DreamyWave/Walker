@@ -93,4 +93,9 @@ public class PlayerStatus : MonoBehaviour
         // ∞‘¿” ∏ÿ√„
         Time.timeScale = 0f;
     }
+
+    public int GetCurrentHP()
+    {
+        return currentHp; 
+    }
 }
